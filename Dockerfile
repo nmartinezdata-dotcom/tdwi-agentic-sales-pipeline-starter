@@ -10,8 +10,11 @@ FROM python:3.13-slim
 
 # Cloud Agent terminals run in tmux (see Cursor cloud agent setup docs).
 # git/sudo are commonly needed for repo work and passwordless admin tasks.
+# curl is required for Cursor's exec-daemon install (not present on slim).
 # freetype/png/jpeg + DejaVu fonts cover matplotlib chart rendering on slim.
 RUN apt-get update && apt-get install -y --no-install-recommends \
+    ca-certificates \
+    curl \
     git \
     sudo \
     tmux \
