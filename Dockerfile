@@ -4,15 +4,21 @@
 # See: https://www.cursor.com/environment-json-dockerfile.md
 # ================================================
 
-# Full Python image (not slim) — includes more system libs for builds and matplotlib.
-FROM python:3.13
+# Slim Python image — much smaller pull than the full python:3.13 image.
+# Install only the system packages Cloud Agents and matplotlib need at runtime.
+FROM python:3.13-slim
 
 # Cloud Agent terminals run in tmux (see Cursor cloud agent setup docs).
 # git/sudo are commonly needed for repo work and passwordless admin tasks.
+# freetype/png/jpeg + DejaVu fonts cover matplotlib chart rendering on slim.
 RUN apt-get update && apt-get install -y --no-install-recommends \
     git \
     sudo \
     tmux \
+    libfreetype6 \
+    libpng16-16 \
+    libjpeg62-turbo \
+    fonts-dejavu-core \
     && rm -rf /var/lib/apt/lists/*
 
 # Good practice per environment-json-dockerfile.md: non-root user "ubuntu" with a home dir,
